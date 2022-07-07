@@ -9,6 +9,7 @@ public class PayCheckProcessor implements ApplicationProcessor{
 
     private MetadataReader cassandraMetadataReader = new CassandraMetadataReader();
     private Dataset<Row> employees;
+    private Dataset<Row> hourlyRates;
 
     @Override
     public void startProcessor() {
@@ -19,5 +20,6 @@ public class PayCheckProcessor implements ApplicationProcessor{
     @Override
     public void getTables() {
         employees = cassandraMetadataReader.getEmployees();
+        hourlyRates = cassandraMetadataReader.getHourlyRate();
     }
 }
