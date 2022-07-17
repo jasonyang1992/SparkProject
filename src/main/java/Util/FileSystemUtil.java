@@ -26,13 +26,13 @@ public class FileSystemUtil {
 
     public static Dataset<Row> readFile(final String fileLocation, final String fileName) throws Exception {
         // Checks if the file exist or not
-        if (Files.exists(Paths.get(fileLocation+fileName))) {
+        if (Files.exists(Paths.get(fileLocation+fileName+PropertyUtil.getProperty("File.Format")))) {
             return SparkUtil.getSparkSession().read()
                     .option("header", true)
                     .option("delimiter", "|")
-                    .csv("/Users/jason/IdeaProjects/SparkBatchProject/dataProcess.dat");
+                    .csv(fileLocation+fileName+PropertyUtil.getProperty("File.Format"));
         } else {
-            throw new Exception("File does not exist for " + fileLocation + fileName);
+            throw new Exception("File does not exist for " + fileLocation + fileName +PropertyUtil.getProperty("File.Format"));
         }
     }
 

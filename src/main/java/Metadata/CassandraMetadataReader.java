@@ -1,5 +1,6 @@
 package Metadata;
 
+import Util.AppConstants;
 import Util.PropertyUtil;
 import Util.SparkUtil;
 import org.apache.spark.sql.Dataset;
@@ -10,7 +11,9 @@ public class CassandraMetadataReader implements MetadataReader{
 
     @Override
     public Dataset<Row> getEmployees() {
-        return getCassandraTable(PropertyUtil.getProperty("Cassandra.Table.Employees"));
+        Dataset<Row> employeeTable = getCassandraTable(PropertyUtil.getProperty("Cassandra.Table.Employees"));
+        employeeTable = employeeTable.filter(employeeTable.col("startdate").leq(AppConstants.TODAY_DATE).and(employeeTable.col("enddate").geq(AppConstants.TODAY_DATE)));
+        return employeeTable;
     }
 
     @Override

@@ -25,10 +25,12 @@ public class PayCheckProcessor implements ApplicationProcessor{
 
         Dataset<Row> joinSource = employees.join(hourlyRates, employees.col("title").equalTo(hourlyRates.col("title")));
         joinSource = joinSource.select(employees.col("*"), hourlyRates.col("pay"));
-
         try {
-            FileSystemUtil.writeToFile(joinSource, PropertyUtil.getProperty("File.Output.Location"), PropertyUtil.getProperty("File.Employee.Payroll"));
-        } catch (IOException e) {
+            Dataset<Row> timesheet = FileSystemUtil.readFileInput("timesheet");
+            timesheet = timesheet.join(joinSource, timesheet.col("workerid").equalTo(joinSource.col("workerid")));
+            timesheet = timesheet.select(joinSource.col("*"), timesheet.col("hourswork"));
+            FileSystemUtil.writeToFile(timesheet, PropertyUtil.getProperty("File.Output.Location"), PropertyUtil.getProperty("File.Employee.Payroll"));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
