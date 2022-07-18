@@ -2,6 +2,6 @@ package Processor;
 
 public interface ApplicationProcessor {
 
-    void startProcessor();
+    void startProcessor() throws Exception;
     void getTables();
 }
